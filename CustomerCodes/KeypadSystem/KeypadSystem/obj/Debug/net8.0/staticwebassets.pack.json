@@ -1,0 +1,33 @@
+{
+  "Files": [
+    {
+      "Id": "D:\\Github Projects\\KeypadSystem\\CustomerCodes\\KeypadSystem\\KeypadSystem\\obj\\Debug\\net8.0\\scopedcss\\projectbundle\\KeypadSystem.bundle.scp.css",
+      "PackagePath": "staticwebassets\\KeypadSystem.bundle.scp.css"
+    },
+    {
+      "Id": "D:\\Github Projects\\KeypadSystem\\CustomerCodes\\KeypadSystem\\KeypadSystem\\wwwroot\\app.css",
+      "PackagePath": "staticwebassets\\app.css"
+    },
+    {
+      "Id": "D:\\Github Projects\\KeypadSystem\\CustomerCodes\\KeypadSystem\\KeypadSystem\\wwwroot\\favicon.png",
+      "PackagePath": "staticwebassets\\favicon.png"
+    },
+    {
+      "Id": "obj\\Debug\\net8.0\\staticwebassets\\msbuild.KeypadSystem.Microsoft.AspNetCore.StaticWebAssets.props",
+      "PackagePath": "build\\Microsoft.AspNetCore.StaticWebAssets.props"
+    },
+    {
+      "Id": "obj\\Debug\\net8.0\\staticwebassets\\msbuild.build.KeypadSystem.props",
+      "PackagePath": "build\\KeypadSystem.props"
+    },
+    {
+      "Id": "obj\\Debug\\net8.0\\staticwebassets\\msbuild.buildMultiTargeting.KeypadSystem.props",
+      "PackagePath": "buildMultiTargeting\\KeypadSystem.props"
+    },
+    {
+      "Id": "obj\\Debug\\net8.0\\staticwebassets\\msbuild.buildTransitive.KeypadSystem.props",
+      "PackagePath": "buildTransitive\\KeypadSystem.props"
+    }
+  ],
+  "ElementsToRemove": []
+}

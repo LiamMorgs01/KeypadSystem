@@ -1,0 +1,71 @@
+{
+  "Version": 1,
+  "WorkspaceRootPath": "D:\\Github Projects\\KeypadSystem\\CustomerCodes\\KeypadSystem\\",
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{02D026A0-2272-46A6-B30A-3569A93CF207}|KeypadSystem\\KeypadSystem.csproj|d:\\github projects\\keypadsystem\\customercodes\\keypadsystem\\keypadsystem\\components\\pages\\adminlogin.razor||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{02D026A0-2272-46A6-B30A-3569A93CF207}|KeypadSystem\\KeypadSystem.csproj|solutionrelative:keypadsystem\\components\\pages\\adminlogin.razor||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{02D026A0-2272-46A6-B30A-3569A93CF207}|KeypadSystem\\KeypadSystem.csproj|d:\\github projects\\keypadsystem\\customercodes\\keypadsystem\\keypadsystem\\components\\pages\\customer.razor||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{02D026A0-2272-46A6-B30A-3569A93CF207}|KeypadSystem\\KeypadSystem.csproj|solutionrelative:keypadsystem\\components\\pages\\customer.razor||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{02D026A0-2272-46A6-B30A-3569A93CF207}|KeypadSystem\\KeypadSystem.csproj|d:\\github projects\\keypadsystem\\customercodes\\keypadsystem\\keypadsystem\\appsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}",
+      "RelativeMoniker": "D:0:0:{02D026A0-2272-46A6-B30A-3569A93CF207}|KeypadSystem\\KeypadSystem.csproj|solutionrelative:keypadsystem\\appsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}"
+    }
+  ],
+  "DocumentGroupContainers": [
+    {
+      "Orientation": 0,
+      "VerticalTabListWidth": 256,
+      "DocumentGroups": [
+        {
+          "DockedWidth": 200,
+          "SelectedChildIndex": 2,
+          "Children": [
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "appsettings.json",
+              "DocumentMoniker": "D:\\Github Projects\\KeypadSystem\\CustomerCodes\\KeypadSystem\\KeypadSystem\\appsettings.json",
+              "RelativeDocumentMoniker": "KeypadSystem\\appsettings.json",
+              "ToolTip": "D:\\Github Projects\\KeypadSystem\\CustomerCodes\\KeypadSystem\\KeypadSystem\\appsettings.json",
+              "RelativeToolTip": "KeypadSystem\\appsettings.json",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAQAAAAOAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001642|",
+              "WhenOpened": "2024-07-21T09:25:34.239Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "Customer.razor",
+              "DocumentMoniker": "D:\\Github Projects\\KeypadSystem\\CustomerCodes\\KeypadSystem\\KeypadSystem\\Components\\Pages\\Customer.razor",
+              "RelativeDocumentMoniker": "KeypadSystem\\Components\\Pages\\Customer.razor",
+              "ToolTip": "D:\\Github Projects\\KeypadSystem\\CustomerCodes\\KeypadSystem\\KeypadSystem\\Components\\Pages\\Customer.razor",
+              "RelativeToolTip": "KeypadSystem\\Components\\Pages\\Customer.razor",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAoAAAAaAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2024-07-10T06:33:07.226Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "AdminLogIn.razor",
+              "DocumentMoniker": "D:\\Github Projects\\KeypadSystem\\CustomerCodes\\KeypadSystem\\KeypadSystem\\Components\\Pages\\AdminLogIn.razor",
+              "RelativeDocumentMoniker": "KeypadSystem\\Components\\Pages\\AdminLogIn.razor",
+              "ToolTip": "D:\\Github Projects\\KeypadSystem\\CustomerCodes\\KeypadSystem\\KeypadSystem\\Components\\Pages\\AdminLogIn.razor",
+              "RelativeToolTip": "KeypadSystem\\Components\\Pages\\AdminLogIn.razor",
+              "ViewState": "AQIAADAAAAAAAAAAAAAAAD0AAAAAAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2024-07-10T06:32:27.422Z",
+              "EditorCaption": ""
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

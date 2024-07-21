@@ -1,0 +1,76 @@
+﻿@layout EmptyLayout
+
+
+@page "/adminlanding/{CompanyId}"
+@inject NavigationManager navManager;
+@inject ICompanyData _cdb;
+@inject AuthenticationStateProvider AuthenticationStateProvider
+
+
+@using Microsoft.AspNetCore.Components.Authorization
+@using System.ComponentModel.DataAnnotations;
+@using DataAccessLibrary.Interfaces;
+@using KeypadSystem.Components.Layout;
+@using KeypadSystem.Authentication;
+
+<PageTitle>Admin Landing</PageTitle>
+
+<CascadingAuthenticationState>
+    <AuthorizeView>
+        <Authorized>
+            <div id="main" style="background-color: @CompanyInformation.CompanyColor;">
+                <div id="content">
+                    <a href="/admindash/@CompanyId">Company Analytics</a>
+                    <a href="/customerlogin/@CompanyId">Customer Log In</a>
+                    <!--<a href="/adminsettings/@CompanyId">Admin Settings</a>-->
+                </div>
+            </div>
+        </Authorized>
+
+        <NotAuthorized>
+
+        </NotAuthorized>
+    </AuthorizeView>
+</CascadingAuthenticationState>
+
+
+
+
+@code {
+    [Parameter]
+    public string CompanyId { get; set; }
+
+    public Company CompanyInformation = new Company();
+
+    protected override async Task OnInitializedAsync()
+    {
+        try
+        {
+            var authState = await AuthenticationStateProvider
+                .GetAuthenticationStateAsync();
+
+            if (!authState.User.Identity.IsAuthenticated)
+            {
+                navManager.NavigateTo("/adminlogin", true);
+            }
+
+            CompanyInformation = await _cdb.GetCompany(Guid.Parse(CompanyId));
+            if (CompanyInformation == null)
+            {
+                navManager.NavigateTo("/adminlogin", true);
+            }
+
+            var customAuthStateProvider = (CustomAuthenticationStateProvider)AuthenticationStateProvider;
+            if (!(await customAuthStateProvider.ValidateUserCompany(Guid.Parse(CompanyId))))
+            {
+                navManager.NavigateTo("/adminlogin", true);
+            }
+
+        }
+        catch (Exception ex)
+        {
+            navManager.NavigateTo("/adminlogin", true);
+        }
+    }
+
+}

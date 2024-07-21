@@ -1,0 +1,201 @@
+﻿@using Microsoft.AspNetCore.Components.Authorization
+@using KeypadSystem.Components.Layout;
+@using KeypadSystem.Authentication;
+
+@page "/admindash/{CompanyId}"
+
+@inject ICompanyData _db
+@layout EmptyLayout
+@inject AuthenticationStateProvider AuthenticationStateProvider
+@inject NavigationManager navManager
+
+@rendermode @(new InteractiveServerRenderMode(prerender:false))
+
+
+<PageTitle>Dashboard</PageTitle>
+
+<CascadingAuthenticationState>
+<AuthorizeView>
+    <Authorized>
+        <div class="dash-container">
+            @if (@companyStats.companyDashStats != null)
+            {
+                <div class="dash-item dash-item-small">
+                    <h1>Customer Entries <bold>(Last 60 Mins)</bold></h1>
+                    <p>@companyStats.companyDashStats.LastHoursCustomers</p>
+                </div>
+                <div class="dash-item dash-item-small">
+                    <h1>Customer Entries (Last 24 Hours)</h1>
+                    <p>@companyStats.companyDashStats.LastDaysCustomers</p>
+                </div>
+                <div class="dash-item dash-item-small">
+                    <h1>Customer Entries (Last 7 Days)</h1>
+                    <p>@companyStats.companyDashStats.LastWeeksCustomers</p>
+                </div>
+            }
+            <div class="dash-item dash-item-big">
+                @if (@companyStats.companyWeekGraphStats != null)
+                {
+                    <LineChart @ref="WeeklineChart" />
+                }
+            </div>
+            <div class="dash-item dash-item-big">
+                @if (@companyStats.companyDayGraphStats != null)
+                {
+                    <LineChart @ref="DaylineChart" />
+                }
+            </div>
+        </div>
+    </Authorized>
+
+    <NotAuthorized>
+        
+    </NotAuthorized>
+</AuthorizeView>
+</CascadingAuthenticationState>
+
+
+@code {
+    [Parameter]
+    public string CompanyId { get; set; }
+
+    private CompanyStats companyStats = new CompanyStats();
+
+
+    private LineChart WeeklineChart = default!;
+    private LineChartOptions WeeklineChartOptions = default!;
+    private ChartData WeekchartData = default!;
+
+    private LineChart DaylineChart = default!;
+    private LineChartOptions DaylineChartOptions = default!;
+    private ChartData DaychartData = default!;
+
+
+    protected override async Task OnInitializedAsync()
+    {
+        try
+        {
+            var authState = await AuthenticationStateProvider
+                .GetAuthenticationStateAsync();
+
+            if (!authState.User.Identity.IsAuthenticated)
+            {
+                navManager.NavigateTo("/adminlogin", true);
+            }
+
+            var customAuthStateProvider = (CustomAuthenticationStateProvider)AuthenticationStateProvider;
+            if (!(await customAuthStateProvider.ValidateUserCompany(Guid.Parse(CompanyId))))
+            {
+                navManager.NavigateTo($"/adminlogin", true);
+            }
+
+
+            
+
+            companyStats.companyDashStats = await _db.GetCompanyDashStats(Guid.Parse(CompanyId));
+            companyStats.companyWeekGraphStats = await _db.GetCompanyWeekGraphStats(Guid.Parse(CompanyId));
+            companyStats.companyDayGraphStats = await _db.GetCompanyDayGraphStats(Guid.Parse(CompanyId));
+
+            #region WeekDash
+            if (companyStats.companyWeekGraphStats != null)
+            {
+                var Weekcolors = ColorUtility.CategoricalTwelveColors;
+
+                var Weeklabels = companyStats.companyWeekGraphStats.Select(s => (string)s.Date.ToString("dd/MM/yyyy")).ToList();
+                var Weekdatasets = new List<IChartDataset>();
+                var Weekdataset1 = new LineChartDataset
+                    {
+                        Label = "Customers",
+                        Data = companyStats.companyWeekGraphStats.Select(s => (double)s.CustomerCount).ToList(),
+                        BackgroundColor = Weekcolors[0],
+                        BorderColor = Weekcolors[0],
+                        BorderWidth = 2,
+                        HoverBorderWidth = 4,
+                        PointBackgroundColor = Weekcolors[0],
+                        PointRadius = 1,
+                        PointHoverRadius = 4,
+                    };
+                Weekdatasets.Add(Weekdataset1);
+
+                WeekchartData = new ChartData { Labels = Weeklabels, Datasets = Weekdatasets };
+
+                WeeklineChartOptions = new();
+                WeeklineChartOptions.Responsive = true;
+                WeeklineChartOptions.Interaction = new Interaction { Mode = InteractionMode.Index };
+
+                WeeklineChartOptions.Scales.X!.Title = new ChartAxesTitle { Text = "Day", Display = true };
+                WeeklineChartOptions.Scales.Y!.Title = new ChartAxesTitle { Text = "Customers", Display = true };
+
+                WeeklineChartOptions.Plugins.Title!.Text = "This Week's Count";
+                WeeklineChartOptions.Plugins.Title.Display = true;   
+            }
+            #endregion
+
+            #region DayDash
+            if (companyStats.companyDayGraphStats != null)
+            {
+                var Daycolors = ColorUtility.CategoricalTwelveColors;
+
+                var Daylabels = companyStats.companyDayGraphStats.Select(s => (string)s.Hour.ToString("HH:mm")).ToList();
+                var Daydatasets = new List<IChartDataset>();
+                var Daydataset1 = new LineChartDataset
+                    {
+                        Label = "Customers",
+                        Data = companyStats.companyDayGraphStats.Select(s => (double)s.CustomerCount).ToList(),
+                        BackgroundColor = Daycolors[0],
+                        BorderColor = Daycolors[0],
+                        BorderWidth = 2,
+                        HoverBorderWidth = 4,
+                        PointBackgroundColor = Daycolors[0],
+                        PointRadius = 1,
+                        PointHoverRadius = 4,
+                    };
+                Daydatasets.Add(Daydataset1);
+
+                DaychartData = new ChartData { Labels = Daylabels, Datasets = Daydatasets };
+
+                DaylineChartOptions = new();
+                DaylineChartOptions.Responsive = true;
+                DaylineChartOptions.Interaction = new Interaction { Mode = InteractionMode.Index };
+
+                DaylineChartOptions.Scales.X!.Title = new ChartAxesTitle { Text = "Hour", Display = true };
+                DaylineChartOptions.Scales.Y!.Title = new ChartAxesTitle { Text = "Customers", Display = true };
+
+                DaylineChartOptions.Plugins.Title!.Text = "This Week's Count";
+                DaylineChartOptions.Plugins.Title.Display = true;
+            }
+            #endregion
+
+
+            StateHasChanged();
+        }
+        catch (Exception ex)
+        {
+            navManager.NavigateTo("/adminlogin", true);
+        }
+
+    }
+
+    private async Task DisplayGreetingAlert()
+    {
+        var authState = await AuthenticationStateProvider
+            .GetAuthenticationStateAsync();
+        var message = $"Hello {authState.User.Identity.Name}";
+        //await js.InvokeVoidAsync("alert", message);
+    }
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (WeeklineChart != null)
+        {
+            await WeeklineChart.InitializeAsync(WeekchartData, WeeklineChartOptions);
+        }
+
+        if (DaylineChart != null)
+        {
+            await DaylineChart.InitializeAsync(DaychartData, DaylineChartOptions);
+        }
+
+        await base.OnAfterRenderAsync(firstRender);
+    }
+}

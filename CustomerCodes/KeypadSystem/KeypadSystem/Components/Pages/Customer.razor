@@ -1,0 +1,115 @@
+﻿@page "/customerlogin/{CompanyId}"
+
+@layout EmptyLayout
+@rendermode InteractiveServer
+
+@using Microsoft.AspNetCore.Components.Authorization
+@using System.ComponentModel.DataAnnotations;
+@using DataAccessLibrary.Interfaces;
+@using KeypadSystem.Components.Layout;
+@using KeypadSystem.Authentication;
+@inject ICustomerData _db;
+@inject ICompanyData _cdb;
+@inject AuthenticationStateProvider authStateProvider;
+@inject NavigationManager navManager;
+
+<PageTitle>Customer Page</PageTitle>
+
+
+<div id="main" class="@MainClass" style="background-color: @CompanyInformation.CompanyColor;">
+        <div id="content">
+            <img id="Logo" src="@CompanyInformation.CompanyLogo" alt="Gym Logo" />
+            
+            <EditForm Model="CustomerCode" OnSubmit="Submit" FormName="CodeInput">
+                <input type="password" id="codeInput" autofocus="" @bind-value=CustomerCode.Code />
+            </EditForm>
+
+            <div id="message" style="@screenMessageClass">
+                <h1>@screenMessage</h1>
+            </div>
+
+            <div id="spinner" class="@spinnerClass">
+                <div class="lds-spinner"><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div></div>
+            </div>
+        </div>
+</div>   
+
+@code {
+    [Parameter]
+    public string CompanyId { get; set; }
+
+    public Company CompanyInformation = new Company();
+
+
+    public CustomerCode CustomerCode { get; set; } = new CustomerCode();
+    public DataAccessLibrary.Models.Customer CustomerLogIn { get; set; } = new DataAccessLibrary.Models.Customer();
+    private string MainClass = "main";
+
+    private bool LoadingInformation = false;
+    private string spinnerClass => LoadingInformation ? "spinner" : "no-spinner";
+
+    private bool screenMessageVisible = false;
+    private string screenMessage = "";
+    private string screenMessageClass => screenMessageVisible ? "visibility: visible;" : "visibility: hidden;";
+
+
+    protected override async Task OnInitializedAsync()
+    {
+        if (CompanyId == null)
+        {
+            navManager.NavigateTo($"/adminlogin", true);
+        }
+
+        var customAuthStateProvider = (CustomAuthenticationStateProvider)authStateProvider;
+        if (!(await customAuthStateProvider.ValidateUserCompany(Guid.Parse(CompanyId))))
+        {
+            navManager.NavigateTo($"/adminlogin", true);
+        }
+
+        CompanyInformation = await _cdb.GetCompany(Guid.Parse(CompanyId));
+    }
+
+    private async void Submit()
+    {
+        try
+        {
+            if (CustomerCode.Code != null)
+            {
+                LoadingInformation = true;
+                await Task.Delay(500);
+                CustomerLogIn = await _db.ValidateCustomer(CustomerCode);
+
+                LoadingInformation = false;
+                screenMessageVisible = true;
+                if (CustomerLogIn != null)
+                {
+                    MainClass = "success";
+                    screenMessage = "Welcome " + CustomerLogIn.CustomerFirstName + "!";
+
+                }
+                else
+                {
+                    MainClass = "failure";
+                    screenMessage = "Sign In Failed, Please Try Again!";
+                }
+
+                StateHasChanged();
+                await Task.Delay(3000);
+
+                //reset screen
+                CustomerCode.Code = null;
+                screenMessageVisible = false;
+                MainClass = "main";
+                StateHasChanged();
+
+            }
+        }
+        catch
+        {
+            LoadingInformation = false;
+            StateHasChanged();
+        }
+    }
+    
+
+}

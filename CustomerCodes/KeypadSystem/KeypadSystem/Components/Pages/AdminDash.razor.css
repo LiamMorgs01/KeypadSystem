@@ -1,0 +1,38 @@
+﻿
+.dash-container {
+    display: flex;
+    flex-wrap: wrap;
+    grid-template-columns:  auto;
+    background-color: #808080;
+    height: 100vh;
+    justify-content: center;
+    gap: 1vw;
+    padding: 1rem;
+}
+
+.dash-item {
+    border-radius: 2rem;
+    background-color: #ffffff;
+    outline: 2px solid #CCC;
+    font-size: 30px;
+    text-align: center;
+    padding: 1rem;
+}
+    .dash-item h1 {
+        font-size: 1.5vw;
+    }
+
+    .dash-item p {
+        font-weight: bold;
+        font-size: 4vw;
+    }
+
+.dash-item-small {
+    width: 31%;
+    height: 20%;
+}
+
+.dash-item-big {
+    width: 48%;
+    height: 70%;
+}

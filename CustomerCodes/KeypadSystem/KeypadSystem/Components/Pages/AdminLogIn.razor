@@ -1,0 +1,88 @@
+﻿@using Microsoft.AspNetCore.Components.Authorization
+
+@page "/adminlogin"
+@page "/"
+
+@layout EmptyLayout
+
+@using KeypadSystem.Components.Layout;
+@using KeypadSystem.Authentication;
+@using DataAccessLibrary.Models;
+@inject UserAccountService userAccountService;
+@inject IJSRuntime js;
+@inject AuthenticationStateProvider authStateProvider;
+@inject NavigationManager navManager;
+@inject ICompanyData _db;
+
+@rendermode InteractiveServer
+
+
+
+<PageTitle>Log In</PageTitle>
+
+<div id="main">
+    <div id="content">
+        <div id="login">
+            <div class="logincontent">
+
+                <div id="title">
+                    <h1>Log In</h1>
+                    <h3>Delve into your businesses analytics!</h3>
+                </div>
+
+                <EditForm Model="newLogInObject" OnSubmit="Authenticate" FormName="LogInForm">
+                       
+                    <span class="fas fa-user"></span>
+                    <input name="username" placeholder="Username" @bind="newLogInObject.Username" type="text"/>
+
+                    <br/>
+
+                    <span class="fas fa-key"></span>
+                    <input name="password" placeholder="Password" @bind="newLogInObject.Password" type="password" />
+
+                    <hr />
+
+                    <button type="submit">Log In</button>
+               </EditForm>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+@code {
+    LogInObject newLogInObject = new LogInObject();
+
+
+    private async Task Authenticate()
+    {
+        try
+        {
+            var UserAccount = await _db.ValidateCompanyLogIn(newLogInObject);
+
+            //var UserAccount = new UserAccount("LocalGymAdmin", Guid.Parse("5922F001-93AA-4388-9DAF-59C81D105CE4"), "Administrator");
+
+            if (UserAccount == null)
+            {
+                await js.InvokeVoidAsync("alert", "Invalid UserName or Password");
+                return;
+            }
+
+            var customAuthStateProvider = (CustomAuthenticationStateProvider)authStateProvider;
+            await customAuthStateProvider.UpdateAuthenticationState(new UserSession
+            {
+            UserName = UserAccount.UserName,
+            Role = UserAccount.Role,
+            CompanyId = UserAccount.CompanyId
+
+            });
+
+            navManager.NavigateTo($"/adminlanding/{UserAccount.CompanyId}", true);
+        }
+        catch(Exception ex)
+        {
+            
+        }
+    }
+
+}
